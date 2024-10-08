@@ -16,7 +16,7 @@ You can also add different configs for different profiles.
 The python prompt to use it on Windows:<br>
 <code>python program.py --rwyconfig "[Config per RWY name]" --configfile "[Config file name].txt"</code>
 
-There are also Bash files given which give you the possibility to just doubleclick it and then Aurora opens with the RWY configuration prefilled.
+There are also Batch files given which give you the possibility to just doubleclick it and then Aurora opens with the RWY configuration prefilled.
 
 If you found the project by yourself and want to use it now but don't know how to use it, feel free to contact me here:<br>
 <code>mail@domi-schaefer.de</code>
