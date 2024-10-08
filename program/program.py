@@ -324,23 +324,19 @@ def set_manual_rwys(s, matrix_of_profiles, rwyconfig):
     for airport in airport_matrix:
         result_string = result_string + airport[0] + ":"
         for dep_rwy in airport[1]:
+            result_string = result_string + dep_rwy[1] + dep_rwy[2]
+            if len(dep_rwy) == 4:
+                result_string += dep_rwy[3]
             if dep_rwy[0] == "e":
-                if len(dep_rwy) == 3:
-                    result_string = result_string + dep_rwy[1] + dep_rwy[2] + ":1:1"
-                elif len(dep_rwy) == 4:
-                    result_string = result_string + dep_rwy[1] + dep_rwy[2] + dep_rwy[3] + ":1:1"
+                result_string += ":1:1"
             elif dep_rwy[0] == "d":
-                if len(dep_rwy) == 3:
-                    result_string = result_string + dep_rwy[1] + dep_rwy[2] + ":1:0"
-                elif len(dep_rwy) == 4:
-                    result_string = result_string + dep_rwy[1] + dep_rwy[2] + dep_rwy[3] + ":1:0"
+                result_string += ":1:0"
         if not airport[2][0] == "":
             for arr_rwy in airport[2]:
-                result_string = result_string + ";" + airport[0] + ":"
-                if len(arr_rwy) == 3:
-                    result_string = result_string + arr_rwy[1] + arr_rwy[2] + ":0:1"
-                elif len(arr_rwy) == 4:
-                    result_string = result_string + arr_rwy[1] + arr_rwy[2] + arr_rwy[3] + ":0:1"
+                result_string = result_string + ";" + airport[0] + ":" + arr_rwy[1] + arr_rwy[2]
+                if len(arr_rwy) == 4:
+                    result_string += arr_rwy[3]
+                result_string += ":0:1"
         result_string += ";"
 
     return replace_section(s, "RUNWAY_MANUAL=", result_string)
