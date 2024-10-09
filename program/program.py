@@ -28,8 +28,9 @@ def read_vars_of_config_string(config):
     global_vors = get_global_vars_of_config(config, "# Format: <VOR 1>[, <VOR 2>, <VOR 3>, ...]")
     global_ndbs = get_global_vars_of_config(config, "# Format: <NDB 1>[, <NDB 2>, <NDB 3>, ...]")
     global_fixes = get_global_vars_of_config(config, "# Format: <FIX 1>[, <FIX 2>, <FIX 3>, ...]")
+    fir = get_global_vars_of_config(config, "# Format: <EDGG/EDMM/EDWW>")
 
-    return [installation_path, profile_name, global_vors, global_ndbs, global_fixes]
+    return [installation_path, profile_name, global_vors, global_ndbs, global_fixes, fir]
 
 
 # Getting the names of the RWY configs the user given
@@ -436,10 +437,9 @@ def main():
     # The 4 letter ICAO code from the main airport. Using the first 4 letters from the profile
     icao_of_main_airport = global_vars[1][0][0:4]
 
-    # Getting all NAV points. If you replace the "EDWW" with "EDMM" and "EDGG" you could also load the from another
-    # FIR sector file
+    # Getting all NAV points
     path_of_nav_data = read_vars_of_config_string(config_file)[0][0]
-    path_of_nav_data += "/SectorFiles/include/DE1/EDWW/NAV/"
+    path_of_nav_data = path_of_nav_data + "/SectorFiles/include/DE1/" + global_vars[5][0] + "/NAV/"
     fixes = get_all_nav_points(path_of_nav_data, "FIX")
     ndbs = get_all_nav_points(path_of_nav_data, "NDB")
     vors = get_all_nav_points(path_of_nav_data, "VOR")

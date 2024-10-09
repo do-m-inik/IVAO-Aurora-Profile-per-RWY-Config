@@ -8,6 +8,7 @@
 # [] are optional. The parts in there you can use but not must. Do not write the [ and ].
 # ... are notations that you can continue on this format.
 # Single X after a name: Same as ...
+# /: Just a or
 
 # Installation path of Aurora
 # Format: <Drive>:\Path\to\Aurora. Normally it's "C:\Aurora"
@@ -16,6 +17,10 @@ C:\Aurora
 
 # Profile Name
 EDDH_APP
+
+# In what german FIR is your profile?
+# Format: <EDGG/EDMM/EDWW>
+EDWW
 
 # What VOR's do you want on every runway config?
 # Format: <VOR 1>[, <VOR 2>, <VOR 3>, ...]
