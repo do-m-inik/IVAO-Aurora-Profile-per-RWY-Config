@@ -1,3 +1,9 @@
+# This is an example config file for a given profile.
+# You have to write everything here in the exact format as here, otherwise it will not work.
+# ALSO: DON'T delete the comments before the config example entries. Those are needed to parse the config file.
+# On the active RWYs, the NAV points for each RWY (not the global ones) and the Remarks you can also just write
+# "NOTHING" as in the examples below to indicate that you don't want a per RWY config of these.
+
 # Installation path of Aurora
 C:\Aurora
 
