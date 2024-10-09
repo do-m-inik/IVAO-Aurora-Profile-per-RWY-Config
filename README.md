@@ -6,10 +6,8 @@ What this program can:
 - Fill the active RWYs in Aurora depending on the RWY Config
 - Fill the ATIS RWYs and Remarks depending on the RWY Config
 
-For now, it only works in Germany if you have the german sector file installed and not for CTR profiles.
-And also only on the Windows version of Aurora.
+It works for Germany if you have a german FIR sector file installed on Windows.
 
-This project is WIP, documentation how to use it exactly will be added in the future.
 As example how to use a config, there is my currently used config for EDDH_APP on this repository.
 You can also add different configs for different profiles.
 
@@ -18,5 +16,15 @@ The python prompt to use it on Windows:<br>
 
 There are also Batch files given which give you the possibility to just doubleclick it and then Aurora opens with the RWY configuration prefilled.
 
-If you found the project by yourself and want to use it now but don't know how to use it, feel free to contact me here:<br>
+## Plans for the future:
+- Filling in the TRL in the ATIS of the airport you control as APP or below
+- Creating an exe, so you don't have to create separate config TXT files
+- Recommend a RWY profile with the METAR of the current airport
+- ...
+
+### This is an unofficial project. There are no associations with the official Aurora from IVAO.
+
+Official Website of IVAO: <code>[ivao.aero](https://ivao.aero)</code>
+
+If you have any questions how to use the program or want to give feedback/suggestions:<br>
 <code>mail@domi-schaefer.de</code>
