@@ -3,24 +3,38 @@
 # ALSO: DON'T delete the comments before the config example entries. Those are needed to parse the config file.
 # On the active RWYs, the NAV points for each RWY (not the global ones) and the Remarks you can also just write
 # "NOTHING" as in the examples below to indicate that you don't want a per RWY config of these.
+# Hints to the formats:
+# <> are placeholders. In there, there are the name of what belongs in there. Do not write the < and >.
+# [] are optional. The parts in there you can use but not must. Do not write the [ and ].
+# ... are notations that you can continue on this format.
+# Single X after a name: Same as ...
 
 # Installation path of Aurora
+# Format: <Drive>:\Path\to\Aurora. Normally it's "C:\Aurora"
+# The path:
 C:\Aurora
 
 # Profile Name
 EDDH_APP
 
 # What VOR's do you want on every runway config?
+# Format: <VOR 1>[, <VOR 2>, <VOR 3>, ...]
 HAM
 
 # What NDB's do you want on every runway config?
+# Format: <NDB 1>[, <NDB 2>, <NDB 3>, ...]
 LYE, WSN
 
 # What FIXES do you want on every runway config?
+# Format: <FIX 1>[, <FIX 2>, <FIX 3>, ...]
 AMLUH, BASUM, EKERN, IDEKO, LUGEG, RAMAR, BOGMU, NOLGO, RARUP, RIBSO, BITNA, ROXEM, DENIX, HL125, HL145, HL165, HL225, HL245, HL265, ANEXI, DEVOD, SOSAX, PISAS
 
 # Here you can add the names of configs for every runway configuration.
 # On every line you can give a custom name for the configuration.
+# Format:
+# <Name 1>
+# [<Name 2>]
+# [<Name X>]
 33-05
 33-23
 23-15
@@ -31,8 +45,12 @@ AMLUH, BASUM, EKERN, IDEKO, LUGEG, RAMAR, BOGMU, NOLGO, RARUP, RIBSO, BITNA, ROX
 15-15
 05-05
 
-# Active RWY's in this format: [name]: [airport ICAO 1] d[dep RWY 1] a[arr RWY 1] [a[arr RWY 2]], [airport ICAO 2] ...
+# Active RWY's set in the "AIRPORTS" menu in Aurora
 # If you don't want to set the active RWY's for an airport, you don't have to write it
+# Format:
+# <Name 1>: <airport ICAO 1> d<dep RWY 1>[ d<dep RWY 2> ...] a<arr RWY 1>[ a<arr RWY 2> ...][, <airport ICAO 2>...]
+# <Name 2>: <airport ICAO 1> d<dep RWY 1>[ d<dep RWY 2> ...] a<arr RWY 1>[ a<arr RWY 2> ...][, <airport ICAO 2>...]
+# <Name X>: <airport ICAO 1> d<dep RWY 1>[ d<dep RWY 2> ...] a<arr RWY 1>[ a<arr RWY 2> ...][, <airport ICAO 2>...]
 33-05: EDDH d33 a05, EDHI d05 a05, EDHL d07 a07
 33-23: EDDH d33 a23, EDHI d23 a23, EDHL d25 a25
 23-15: EDDH d23 a15, EDHI d23 a23, EDHL d25 a25
@@ -43,13 +61,24 @@ AMLUH, BASUM, EKERN, IDEKO, LUGEG, RAMAR, BOGMU, NOLGO, RARUP, RIBSO, BITNA, ROX
 15-15: EDDH d15 a15, EDHI d23 a23, EDHL d07 a07
 05-05: EDDH d05 a05, EDHI d05 a05, EDHL d07 a07
 
-# What VOR's do you want per runway config? Format: [name]: VOR 1, VOR 2, ...
+# What VOR's do you want per runway config?
+# Format:
+# <Name 1>: <VOR 1>[, <VOR 2>, <VOR 3>, ...]
+# <Name 2>: <VOR 1>[, <VOR 2>, <VOR 3>, ...]
+# <Name X>: <VOR 1>[, <VOR 2>, <VOR 3>, ...]
 NOTHING
 
-# What NDB's do you want per runway config? Format: [name]: NDB 1, NDB 2, ...
+# What NDB's do you want per runway config?
+# Format:
+# <Name 1>: <NDB 1>[, <NDB 2>, <NDB 3>, ...]
+# <Name 2>: <NDB 1>[, <NDB 2>, <NDB 3>, ...]
+# <Name X>: <NDB 1>[, <NDB 2>, <NDB 3>, ...]
 NOTHING
 
-# What FIXES do you want per runway config? Format: [name]: FIX 1, FIX 2, ...
+# What FIXES do you want per runway config?
+# <Name 1>: <FIX 1>[, <FIX 2>, <FIX 3>, ...]
+# <Name 2>: <FIX 1>[, <FIX 2>, <FIX 3>, ...]
+# <Name X>: <FIX 1>[, <FIX 2>, <FIX 3>, ...]
 33-05: DH210, DH211, DH213, DH214, DH215, DH225, DH226, DH227, DH228, DH229, DH230, DH231, DH232, DH233, DH234, DH235, DH255, DH256, DH257, DH258
 33-23: DH600, DH609, DH610, DH611, DH612, DH613, DH614, DH615, DH620, DH621, DH632, DH633, DH634, DH635, DH655, DH656, DH657, DH658
 23-15: DH406, DH407, DH408, DH409, DH410, DH411, DH412, DH413, DH414, DH416, DH417, DH428, DH429, DH430, DH431, DH432, DH433, DH434, DH435, DH455, DH456, DH457, DH458
@@ -60,7 +89,10 @@ NOTHING
 15-15: DH406, DH407, DH408, DH409, DH410, DH411, DH412, DH413, DH414, DH416, DH417, DH428, DH429, DH430, DH431, DH432, DH433, DH434, DH435, DH455, DH456, DH457, DH458
 05-05: DH210, DH211, DH213, DH214, DH215, DH225, DH226, DH227, DH228, DH229, DH230, DH231, DH232, DH233, DH234, DH235, DH255, DH256, DH257, DH258
 
-# What ATIS remarks do you want per runway config? Format: [name]: Remarks
+# What ATIS remarks do you want per runway config?
+# <Name 1>: <Remarks>
+# <Name 2>: <Remarks>
+# <Name X>: <Remarks>
 33-05: EXPECT ils APCH RWY 05
 33-23: EXPECT ils APCH RWY 23
 23-15: EXPECT ils APCH RWY 15

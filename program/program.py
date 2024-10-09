@@ -23,18 +23,18 @@ def get_global_vars_of_config(config, delimiter):
 # Read the vars of the config which should be on every RWY config in the profile
 # Returns an array of all global vars
 def read_vars_of_config_string(config):
-    installation_path = get_global_vars_of_config(config, "# Installation path of Aurora")
+    installation_path = get_global_vars_of_config(config, "# The path:")
     profile_name = get_global_vars_of_config(config, "# Profile Name")
-    global_vors = get_global_vars_of_config(config, "# What VOR's do you want on every runway config?")
-    global_ndbs = get_global_vars_of_config(config, "# What NDB's do you want on every runway config?")
-    global_fixes = get_global_vars_of_config(config, "# What FIXES do you want on every runway config?")
+    global_vors = get_global_vars_of_config(config, "# Format: <VOR 1>[, <VOR 2>, <VOR 3>, ...]")
+    global_ndbs = get_global_vars_of_config(config, "# Format: <NDB 1>[, <NDB 2>, <NDB 3>, ...]")
+    global_fixes = get_global_vars_of_config(config, "# Format: <FIX 1>[, <FIX 2>, <FIX 3>, ...]")
 
     return [installation_path, profile_name, global_vors, global_ndbs, global_fixes]
 
 
 # Getting the names of the RWY configs the user given
 def get_rwy_config_names(config):
-    config_split = config.split("# On every line you can give a custom name for the configuration.")
+    config_split = config.split("# [<Name X>]")
     result = config_split[1].strip().split('\n\n')[0].split("\n")
 
     return result
@@ -52,7 +52,8 @@ def process_string_for_rwy_config(s):
 
 # Gives a formatted array of given airports with their active runways
 def get_rwy_per_rwy_config(config):
-    rwy_split = config.split("# If you don't want to set the active RWY's for an airport, you don't have to write it")
+    rwy_split = config.split("# <Name X>: <airport ICAO 1> d<dep RWY 1>[ d<dep RWY 2> ...] a<arr RWY 1>[ a<arr RWY 2> "
+                             "...][, <airport ICAO 2>...]")
     only_rwy_split = rwy_split[1].strip().split('\n\n')[0].split("\n")
     formatted_array = [process_string_for_rwy_config(s) for s in only_rwy_split]
 
@@ -75,13 +76,13 @@ def process_entry_per_rwy_config(entry):
 def get_values_per_rwy_config(config, value_type):
     string_split = ""
     if value_type == "VOR":
-        string_split = config.split("# What VOR's do you want per runway config? Format: [name]: VOR 1, VOR 2, ...")
+        string_split = config.split("# <Name X>: <VOR 1>[, <VOR 2>, <VOR 3>, ...]")
     elif value_type == "NDB":
-        string_split = config.split("# What NDB's do you want per runway config? Format: [name]: NDB 1, NDB 2, ...")
+        string_split = config.split("# <Name X>: <NDB 1>[, <NDB 2>, <NDB 3>, ...]")
     elif value_type == "FIX":
-        string_split = config.split("# What FIXES do you want per runway config? Format: [name]: FIX 1, FIX 2, ...")
+        string_split = config.split("# <Name X>: <FIX 1>[, <FIX 2>, <FIX 3>, ...]")
     elif value_type == "REMARKS":
-        string_split = config.split("# What ATIS remarks do you want per runway config? Format: [name]: Remarks")
+        string_split = config.split("# <Name X>: <Remarks>")
     only_string_split = string_split[1].strip().split('\n\n')[0].split("\n")
     if only_string_split[0] == "NOTHING":  # If keyword NOTHING is written, it does nothing
         return ""
