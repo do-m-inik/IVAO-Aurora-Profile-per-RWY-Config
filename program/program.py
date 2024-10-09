@@ -277,10 +277,11 @@ def get_new_remarks(matrix_of_profiles, rwyconfig):
 
 
 # Replaces the ATIS Remarks, Takeoff and Landing section from the profile string
-def replace_atis_remarks_dep_arr_in_string(s, remarks, dep, arr):
+def replace_atis_remarks_dep_arr_in_string(s, remarks, dep, arr, is_fis_or_ctr):
     s = replace_section(s, "Remarks=", remarks)
-    s = replace_section(s, "Takeoff=", dep)
-    s = replace_section(s, "Landing=", arr)
+    if not is_fis_or_ctr:
+        s = replace_section(s, "Takeoff=", dep)
+        s = replace_section(s, "Landing=", arr)
 
     return s
 
@@ -292,7 +293,10 @@ def replace_file_content(file_path, new_content):
 
 
 # Returns the RWY's as string from the main airport for the ATIS
-def get_runways_of_main_airport(matrix_of_profiles, main_airport_icao, rwyconfig):
+def get_runways_of_main_airport(matrix_of_profiles, main_airport_icao, rwyconfig, is_fis_or_ctr):
+    if is_fis_or_ctr:
+        return [0, 0]
+
     dep = []
     arr = []
     dep_str = ""
@@ -417,6 +421,15 @@ def set_manual_rwys(s, matrix_of_profiles, rwyconfig):
     return replace_section(s, "RUNWAY_MANUAL=", result_string)
 
 
+# Check if given profile is a CTR or FIS profile
+def is_ctr_or_fis_profile(profile_name):
+    atc_position = profile_name[len(profile_name) - 3:]
+    if atc_position == "FIS" or atc_position == "CTR":
+        return True
+    else:
+        return False
+
+
 def main():
     # Getting the name of the config file and which RWY config should be used in there
     parser = argparse.ArgumentParser(description="None")
@@ -431,10 +444,13 @@ def main():
     # Saving the vars which should be on every RWY config as array
     global_vars = read_vars_of_config_string(config_file)
 
+    # the info if the given profile is a FIS or CTR profile
+    is_fis_or_ctr = is_ctr_or_fis_profile(global_vars[1][0])
+
     # Saving the vars which should be on a specific RWY config as multidimensional array
     matrix_of_profiles = get_matrix_of_profiles(get_rwy_config_names(config_file), config_file)
 
-    # The 4 letter ICAO code from the main airport. Using the first 4 letters from the profile
+    # The 4 letter ICAO code from the main airport or the FIR. Using the first 4 letters from the profile
     icao_of_main_airport = global_vars[1][0][0:4]
 
     # Getting all NAV points
@@ -472,10 +488,11 @@ def main():
     remarks = get_new_remarks(matrix_of_profiles, args.rwyconfig)
 
     # Getting the main RWYs for a specific RWY config
-    main_rwys = get_runways_of_main_airport(matrix_of_profiles, icao_of_main_airport, args.rwyconfig)
+    main_rwys = get_runways_of_main_airport(matrix_of_profiles, icao_of_main_airport, args.rwyconfig, is_fis_or_ctr)
 
     # Replacing the ATIS remarks and main RWY's from the profile string
-    new_profile_string = replace_atis_remarks_dep_arr_in_string(new_profile_string, remarks, main_rwys[0], main_rwys[1])
+    new_profile_string = replace_atis_remarks_dep_arr_in_string(new_profile_string, remarks, main_rwys[0],
+                                                                main_rwys[1], is_fis_or_ctr)
 
     # Replacing the active RWY's displayed in the "AIRPORTS" menu in the profile string
     new_profile_string = set_manual_rwys(new_profile_string, matrix_of_profiles, args.rwyconfig)
