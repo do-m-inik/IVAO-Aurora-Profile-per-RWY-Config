@@ -6,7 +6,7 @@ What this program can:
 - Fill the active RWYs in Aurora depending on the RWY Config
 - Fill the ATIS RWYs and Remarks depending on the RWY Config
 
-For now it only works in Germany if you have the EDWW sector file installed.
+For now, it only works in Germany if you have the EDWW sector file installed and not for CTR profiles.
 And also only on the Windows version of Aurora.
 
 This project is WIP, documentation how to use it exactly will be added in the future.
