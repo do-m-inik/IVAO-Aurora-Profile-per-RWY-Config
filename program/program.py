@@ -401,22 +401,22 @@ def set_manual_rwys(s, matrix_of_profiles, rwyconfig):
     # <ICAO1>:<RWY1>:<[1:0]/[0:1]/[1:1];<ICAO2>...;
     # Example: EDDH:33:1:0;EDDH:23:0:1;EDHI:23:1:1;EDHL:25:1:1;
     for airport in airport_matrix:
-        result_string = result_string + airport[0] + ":"
         for dep_rwy in airport[1]:
-            result_string = result_string + dep_rwy[1] + dep_rwy[2]
+            result_string = result_string + airport[0] + ":" + dep_rwy[1] + dep_rwy[2]
             if len(dep_rwy) == 4:
                 result_string += dep_rwy[3]
             if dep_rwy[0] == "e":
                 result_string += ":1:1"
             elif dep_rwy[0] == "d":
                 result_string += ":1:0"
+            result_string += ";"
         if not airport[2][0] == "":
             for arr_rwy in airport[2]:
                 result_string = result_string + ";" + airport[0] + ":" + arr_rwy[1] + arr_rwy[2]
                 if len(arr_rwy) == 4:
                     result_string += arr_rwy[3]
                 result_string += ":0:1"
-        result_string += ";"
+            result_string += ";"
 
     return replace_section(s, "RUNWAY_MANUAL=", result_string)
 
