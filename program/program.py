@@ -1,4 +1,5 @@
-import argparse
+import tkinter as tk
+import subprocess
 
 
 # Read given config file and returns it as a string
@@ -430,15 +431,58 @@ def is_ctr_or_fis_profile(profile_name):
         return False
 
 
+# String for the naming of the RWY Config
+main_string = ""
+
+
+# Modifies string as input for the RWY config
+def modify_string(new_value, root):
+    global main_string
+    main_string = new_value  # Changes the string for the chosen RWY config name
+
+    # Open Aurora
+    subprocess.Popen(r'C:\Aurora\Aurora.exe', cwd=r'C:\Aurora')
+
+    # Close window
+    root.destroy()
+
+
 def main():
-    # Getting the name of the config file and which RWY config should be used in there
-    parser = argparse.ArgumentParser(description="None")
-    parser.add_argument('--rwyconfig', metavar="RWYCONFIG", type=str, help="Name of RWY Config")
-    parser.add_argument('--configfile', metavar="RWYCONFIG", type=str, help="Name of Config file")
-    args = parser.parse_args()
+    global main_string
+
+    # Create GUI window
+    root = tk.Tk()
+    root.title("IVAO Aurora Profile per RWY Config")
+    root.geometry("400x200")
+    root.configure(bg="white")
+
+    # Header label
+    label = tk.Label(root, text=f"Choose your Runway Config:", bg="white", wraplength=350)
+    label.pack(pady=20)
+
+    # Buttons for RWY Configs
+    button1 = tk.Button(
+        root,
+        text="   06   ",
+        command=lambda: modify_string("06", root)
+    )
+    button1.pack(pady=10)
+
+    button2 = tk.Button(
+        root,
+        text="   24   ",
+        command=lambda: modify_string("24", root)
+    )
+    button2.pack(pady=10)
+
+    # Start GUI
+    root.mainloop()
+
+    # Setting the current RWY config
+    rwy_config = main_string
 
     # Loading the wished config file as a string
-    config_file_path = "../configs/" + args.configfile
+    config_file_path = "AFILEPATH"
     config_file = config_file_as_string(config_file_path)
 
     # Saving the vars which should be on every RWY config as array
@@ -471,31 +515,31 @@ def main():
     fixes = nav_data_array[2]
 
     # Removing the NAV points which should be displayed on a specific RWY config
-    nav_data_array = remove_navdata_per_rwyconfig(vors, ndbs, fixes, matrix_of_profiles, args.rwyconfig)
+    nav_data_array = remove_navdata_per_rwyconfig(vors, ndbs, fixes, matrix_of_profiles, rwy_config)
     vors = nav_data_array[0]
     ndbs = nav_data_array[1]
     fixes = nav_data_array[2]
 
     # If the given RWY config name does not exist, the hidden NAV points will be empty
     if not vors or not ndbs or not fixes:
-        print("Error. Profile with name: \"" + args.rwyconfig + "\" does not exist in the config file.")
+        print("Error. Profile with name: \"" + rwy_config + "\" does not exist in the config file.")
         return
 
     # Replacing the NAV points from the profile string
     new_profile_string = replace_navaids_in_string(profile_string, fixes, vors, ndbs)
 
     # Getting the remarks for a specific RWY config
-    remarks = get_new_remarks(matrix_of_profiles, args.rwyconfig)
+    remarks = get_new_remarks(matrix_of_profiles, rwy_config)
 
     # Getting the main RWYs for a specific RWY config
-    main_rwys = get_runways_of_main_airport(matrix_of_profiles, icao_of_main_airport, args.rwyconfig, is_fis_or_ctr)
+    main_rwys = get_runways_of_main_airport(matrix_of_profiles, icao_of_main_airport, rwy_config, is_fis_or_ctr)
 
     # Replacing the ATIS remarks and main RWY's from the profile string
     new_profile_string = replace_atis_remarks_dep_arr_in_string(new_profile_string, remarks, main_rwys[0],
                                                                 main_rwys[1], is_fis_or_ctr)
 
     # Replacing the active RWY's displayed in the "AIRPORTS" menu in the profile string
-    new_profile_string = set_manual_rwys(new_profile_string, matrix_of_profiles, args.rwyconfig)
+    new_profile_string = set_manual_rwys(new_profile_string, matrix_of_profiles, rwy_config)
 
     # Taking the new profile string and replacing it with the text which were on the old profile file
     filepath_of_profile = global_vars[0][0] + "/Profiles/" + global_vars[1][0] + ".cpr"
