@@ -8,7 +8,8 @@ os.makedirs(appdatapath, exist_ok=True)
 configfilename = pjoin(appdatapath, "config.json")
 
 DEFAULT_CONFIG = {
-    'the_config_file_path': appdatapath + "\\" + "config_eddb.txt"
+    'the_config_file_path': appdatapath + "\\" + "config_eddb.txt",
+    'aurora_installation_path': "Test"
 }
 
 
@@ -462,12 +463,12 @@ main_string = ""
 
 
 # Modifies string as input for the RWY config
-def modify_string(new_value, root):
+def modify_string(new_value, root, path):
     global main_string
     main_string = new_value  # Changes the string for the chosen RWY config name
 
     # Open Aurora
-    subprocess.Popen(r'C:\Aurora\Aurora.exe', cwd=r'C:\Aurora')
+    subprocess.Popen(fr'{path}\Aurora.exe', cwd=path)
 
     # Close window
     root.destroy()
@@ -475,9 +476,7 @@ def modify_string(new_value, root):
 
 def main():
     config = load_config()
-
-    store_config(config)
-
+    
     global main_string
 
     # Loading the wished config file as a string
@@ -486,6 +485,8 @@ def main():
 
     # Saving the vars which should be on every RWY config as array
     global_vars = read_vars_of_config_string(config_file)
+
+    config['aurora_installation_path'] = global_vars[0][0]
 
     # the info if the given profile is a FIS or CTR profile
     is_fis_or_ctr = is_ctr_or_fis_profile(global_vars[1][0])
@@ -528,63 +529,63 @@ def main():
     button1 = tk.Button(
         root,
         text="   " + rwy_config_names[0] + "   ",
-        command=lambda: modify_string(rwy_config_names[0], root)
+        command=lambda: modify_string(rwy_config_names[0], root, config['aurora_installation_path'])
     )
     button1.pack(pady=5)
     if len(rwy_config_names) > 1:
         button2 = tk.Button(
             root,
             text="   " + rwy_config_names[1] + "   ",
-            command=lambda: modify_string(rwy_config_names[1], root)
+            command=lambda: modify_string(rwy_config_names[1], root, config['aurora_installation_path'])
         )
         button2.pack(pady=5)
     if len(rwy_config_names) > 2:
         button3 = tk.Button(
             root,
             text="   " + rwy_config_names[2] + "   ",
-            command=lambda: modify_string(rwy_config_names[2], root)
+            command=lambda: modify_string(rwy_config_names[2], root, config['aurora_installation_path'])
         )
         button3.pack(pady=5)
     if len(rwy_config_names) > 3:
         button4 = tk.Button(
             root,
             text="   " + rwy_config_names[3] + "   ",
-            command=lambda: modify_string(rwy_config_names[3], root)
+            command=lambda: modify_string(rwy_config_names[3], root, config['aurora_installation_path'])
         )
         button4.pack(pady=5)
     if len(rwy_config_names) > 4:
         button5 = tk.Button(
             root,
             text="   " + rwy_config_names[4] + "   ",
-            command=lambda: modify_string(rwy_config_names[4], root)
+            command=lambda: modify_string(rwy_config_names[4], root, config['aurora_installation_path'])
         )
         button5.pack(pady=5)
     if len(rwy_config_names) > 5:
         button6 = tk.Button(
             root,
             text="   " + rwy_config_names[5] + "   ",
-            command=lambda: modify_string(rwy_config_names[5], root)
+            command=lambda: modify_string(rwy_config_names[5], root, config['aurora_installation_path'])
         )
         button6.pack(pady=5)
     if len(rwy_config_names) > 6:
         button7 = tk.Button(
             root,
             text="   " + rwy_config_names[6] + "   ",
-            command=lambda: modify_string(rwy_config_names[6], root)
+            command=lambda: modify_string(rwy_config_names[6], root, config['aurora_installation_path'])
         )
         button7.pack(pady=5)
     if len(rwy_config_names) > 7:
         button8 = tk.Button(
             root,
             text="   " + rwy_config_names[7] + "   ",
-            command=lambda: modify_string(rwy_config_names[7], root)
+            command=lambda: modify_string(rwy_config_names[7], root, config['aurora_installation_path'])
         )
         button8.pack(pady=5)
     if len(rwy_config_names) == 9:
         button9 = tk.Button(
             root,
             text="   " + rwy_config_names[8] + "   ",
-            command=lambda: modify_string(rwy_config_names[8], root)
+            command=lambda: modify_string(rwy_config_names[8], root, config['aurora_installation_path'])
         )
         button9.pack(pady=5)
 
@@ -624,6 +625,8 @@ def main():
     # Taking the new profile string and replacing it with the text which were on the old profile file
     filepath_of_profile = global_vars[0][0] + "/Profiles/" + global_vars[1][0] + ".cpr"
     replace_file_content(filepath_of_profile, new_profile_string)
+    
+    store_config(config)
 
 
 if __name__ == "__main__":
