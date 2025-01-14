@@ -14,7 +14,8 @@ DEFAULT_CONFIG = {
     'profile_name': "EDDH_TWR",
     'global_vors': ["HAM"],
     'global_ndbs': ["LYE"],
-    'global_fixes': ["AMLUH"]
+    'global_fixes': ["AMLUH"],
+    'rwy_configs': [["01", ["EDDH"], ["BKD"], ["WSN"], ["IDEKO"], "EXPECT"]]
 }
 
 
