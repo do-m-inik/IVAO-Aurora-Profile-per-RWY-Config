@@ -480,37 +480,6 @@ def main():
 
     global main_string
 
-    # Create GUI window
-    root = tk.Tk()
-    root.title("IVAO Aurora Profile per RWY Config")
-    root.geometry("400x200")
-    root.configure(bg="white")
-
-    # Header label
-    label = tk.Label(root, text=f"Choose your Runway Config:", bg="white", wraplength=350)
-    label.pack(pady=20)
-
-    # Buttons for RWY Configs
-    button1 = tk.Button(
-        root,
-        text="   06   ",
-        command=lambda: modify_string("06", root)
-    )
-    button1.pack(pady=10)
-
-    button2 = tk.Button(
-        root,
-        text="   24   ",
-        command=lambda: modify_string("24", root)
-    )
-    button2.pack(pady=10)
-
-    # Start GUI
-    root.mainloop()
-
-    # Setting the current RWY config
-    rwy_config = main_string
-
     # Loading the wished config file as a string
     config_file_path = config['the_config_file_path']
     config_file = config_file_as_string(config_file_path)
@@ -543,6 +512,87 @@ def main():
     vors = nav_data_array[0]
     ndbs = nav_data_array[1]
     fixes = nav_data_array[2]
+
+    # Create GUI window
+    root = tk.Tk()
+    root.title("IVAO Aurora Profile per RWY Config")
+    root.geometry("400x400")
+    root.configure(bg="white")
+
+    # Header label
+    label = tk.Label(root, text=f"Choose your Runway Config:", bg="white", wraplength=350)
+    label.pack(pady=20)
+
+    # Buttons for RWY Configs
+    rwy_config_names = [sublist[0] for sublist in matrix_of_profiles]
+    button1 = tk.Button(
+        root,
+        text="   " + rwy_config_names[0] + "   ",
+        command=lambda: modify_string(rwy_config_names[0], root)
+    )
+    button1.pack(pady=5)
+    if len(rwy_config_names) > 1:
+        button2 = tk.Button(
+            root,
+            text="   " + rwy_config_names[1] + "   ",
+            command=lambda: modify_string(rwy_config_names[1], root)
+        )
+        button2.pack(pady=5)
+    if len(rwy_config_names) > 2:
+        button3 = tk.Button(
+            root,
+            text="   " + rwy_config_names[2] + "   ",
+            command=lambda: modify_string(rwy_config_names[2], root)
+        )
+        button3.pack(pady=5)
+    if len(rwy_config_names) > 3:
+        button4 = tk.Button(
+            root,
+            text="   " + rwy_config_names[3] + "   ",
+            command=lambda: modify_string(rwy_config_names[3], root)
+        )
+        button4.pack(pady=5)
+    if len(rwy_config_names) > 4:
+        button5 = tk.Button(
+            root,
+            text="   " + rwy_config_names[4] + "   ",
+            command=lambda: modify_string(rwy_config_names[4], root)
+        )
+        button5.pack(pady=5)
+    if len(rwy_config_names) > 5:
+        button6 = tk.Button(
+            root,
+            text="   " + rwy_config_names[5] + "   ",
+            command=lambda: modify_string(rwy_config_names[5], root)
+        )
+        button6.pack(pady=5)
+    if len(rwy_config_names) > 6:
+        button7 = tk.Button(
+            root,
+            text="   " + rwy_config_names[6] + "   ",
+            command=lambda: modify_string(rwy_config_names[6], root)
+        )
+        button7.pack(pady=5)
+    if len(rwy_config_names) > 7:
+        button8 = tk.Button(
+            root,
+            text="   " + rwy_config_names[7] + "   ",
+            command=lambda: modify_string(rwy_config_names[7], root)
+        )
+        button8.pack(pady=5)
+    if len(rwy_config_names) == 9:
+        button9 = tk.Button(
+            root,
+            text="   " + rwy_config_names[8] + "   ",
+            command=lambda: modify_string(rwy_config_names[8], root)
+        )
+        button9.pack(pady=5)
+
+    # Start GUI
+    root.mainloop()
+
+    # Setting the current RWY config
+    rwy_config = main_string
 
     # Removing the NAV points which should be displayed on a specific RWY config
     nav_data_array = remove_navdata_per_rwyconfig(vors, ndbs, fixes, matrix_of_profiles, rwy_config)
