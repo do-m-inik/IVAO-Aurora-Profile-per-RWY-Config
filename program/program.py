@@ -9,7 +9,12 @@ configfilename = pjoin(appdatapath, "config.json")
 
 DEFAULT_CONFIG = {
     'the_config_file_path': appdatapath + "\\" + "config_eddb.txt",
-    'aurora_installation_path': "Test"
+    'aurora_installation_path': "C:\\Aurora",
+    'fir': "EDWW",
+    'profile_name': "EDDH_TWR",
+    'global_vors': ["HAM"],
+    'global_ndbs': ["LYE"],
+    'global_fixes': ["AMLUH"]
 }
 
 
