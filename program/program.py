@@ -69,7 +69,7 @@ def read_vars_of_config_string(config, config_json):
     config_json['global_vors'] = global_vors
     config_json['global_ndbs'] = global_ndbs
     config_json['global_fixes'] = global_fixes
-    return [installation_path, profile_name, global_vors, global_ndbs, global_fixes, fir, config_json]
+    return config_json
 
 
 # Getting the names of the RWY configs the user given
@@ -194,31 +194,31 @@ def profile_to_string(installation_path, profile_name):
 # Takes all NAV points from the sector file and removes the NAV points which were defined in the config file
 # In Aurora you have to write every NAV point to hide. Shown NAV points are not displayed in the profile file
 # Returns all NAV points which are left
-def remove_nav_points_from_global_vars(global_vars, vors, ndbs, fixes):
+def remove_nav_points_from_config(config, vors, ndbs, fixes):
     new_vors = []
     new_ndbs = []
     new_fixes = []
     found = False
 
     for vor in vors:
-        for global_vars_vor in global_vars[2]:
-            if vor == global_vars_vor:
+        for config_vor in config['global_vors']:
+            if vor == config_vor:
                 found = True
         if not found:
             new_vors.append(vor)
         found = False
 
     for ndb in ndbs:
-        for global_vars_ndb in global_vars[3]:
-            if ndb == global_vars_ndb:
+        for config_ndb in config['global_ndbs']:
+            if ndb == config_ndb:
                 found = True
         if not found:
             new_ndbs.append(ndb)
         found = False
 
     for fix in fixes:
-        for global_vars_fix in global_vars[4]:
-            if fix == global_vars_fix:
+        for config_fix in config['global_fixes']:
+            if fix == config_fix:
                 found = True
         if not found:
             new_fixes.append(fix)
@@ -494,35 +494,33 @@ def main():
     config_file_path = config['the_config_file_path']
     config_file = config_file_as_string(config_file_path)
 
-    # Saving the vars which should be on every RWY config as array
-    global_vars = read_vars_of_config_string(config_file, config)
-
-    config = global_vars[6]
+    # Saving the vars which should be on every RWY config into the config JSON
+    config = read_vars_of_config_string(config_file, config)
 
     # The info if the given profile is a FIS or CTR profile
-    is_fis_or_ctr = is_ctr_or_fis_profile(global_vars[1][0])
+    is_fis_or_ctr = is_ctr_or_fis_profile(config['profile_name'])
 
     # Saving the vars which should be on a specific RWY config as multidimensional array
     matrix_of_profiles = get_matrix_of_profiles(get_rwy_config_names(config_file), config_file)
     config['rwy_configs'] = matrix_of_profiles
 
     # The 4 letter ICAO code from the main airport or the FIR. Using the first 4 letters from the profile
-    icao_of_main_airport = global_vars[1][0][0:4]
+    icao_of_main_airport = config['profile_name'][0:4]
 
     # Getting all NAV points
-    path_of_nav_data = global_vars[0][0]
+    path_of_nav_data = config['aurora_installation_path']
     path_of_nav_data = path_of_nav_data.replace('\\', '/')
-    path_of_nav_data = path_of_nav_data + "/SectorFiles/include/DE1/" + global_vars[5][0] + "/NAV/"
+    path_of_nav_data = path_of_nav_data + "/SectorFiles/include/DE1/" + config['fir'] + "/NAV/"
     
     fixes = get_all_nav_points(path_of_nav_data, "FIX")
     ndbs = get_all_nav_points(path_of_nav_data, "NDB")
     vors = get_all_nav_points(path_of_nav_data, "VOR")
 
     # The profile file as a string
-    profile_string = profile_to_string(global_vars[0][0], global_vars[1][0])
+    profile_string = profile_to_string(config['aurora_installation_path'], config['profile_name'])
     
     # Removing the NAV points which should be displayed on every RWY config
-    nav_data_array = remove_nav_points_from_global_vars(global_vars, vors, ndbs, fixes)
+    nav_data_array = remove_nav_points_from_config(config, vors, ndbs, fixes)
     vors = nav_data_array[0]
     ndbs = nav_data_array[1]
     fixes = nav_data_array[2]
@@ -636,7 +634,7 @@ def main():
     new_profile_string = set_manual_rwys(new_profile_string, matrix_of_profiles, rwy_config)
 
     # Taking the new profile string and replacing it with the text which were on the old profile file
-    filepath_of_profile = global_vars[0][0] + "/Profiles/" + global_vars[1][0] + ".cpr"
+    filepath_of_profile = config['aurora_installation_path'] + "/Profiles/" + config['profile_name'] + ".cpr"
     replace_file_content(filepath_of_profile, new_profile_string)
     
     store_config(config)
