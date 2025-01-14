@@ -1,6 +1,7 @@
 import tkinter as tk
 import subprocess
 import json
+import time
 import os
 from os.path import join as pjoin
 appdatapath = pjoin(os.getenv('LOCALAPPDATA'), "AuroraProfilePerRWYConfig")
@@ -56,15 +57,20 @@ def get_global_vars_of_config(config, delimiter):
 
 # Read the vars of the config which should be on every RWY config in the profile
 # Returns an array of all global vars
-def read_vars_of_config_string(config):
+def read_vars_of_config_string(config, config_json):
     installation_path = get_global_vars_of_config(config, "# The path:")
     profile_name = get_global_vars_of_config(config, "# Profile Name")
     global_vors = get_global_vars_of_config(config, "# Format: <VOR 1>[, <VOR 2>, <VOR 3>, ...]")
     global_ndbs = get_global_vars_of_config(config, "# Format: <NDB 1>[, <NDB 2>, <NDB 3>, ...]")
     global_fixes = get_global_vars_of_config(config, "# Format: <FIX 1>[, <FIX 2>, <FIX 3>, ...]")
     fir = get_global_vars_of_config(config, "# Format: <EDGG/EDMM/EDWW>")
-
-    return [installation_path, profile_name, global_vors, global_ndbs, global_fixes, fir]
+    config_json['aurora_installation_path'] = installation_path[0]
+    config_json['fir'] = fir[0]
+    config_json['profile_name'] = profile_name[0]
+    config_json['global_vors'] = global_vors
+    config_json['global_ndbs'] = global_ndbs
+    config_json['global_fixes'] = global_fixes
+    return [installation_path, profile_name, global_vors, global_ndbs, global_fixes, fir, config_json]
 
 
 # Getting the names of the RWY configs the user given
@@ -490,9 +496,10 @@ def main():
     config_file = config_file_as_string(config_file_path)
 
     # Saving the vars which should be on every RWY config as array
-    global_vars = read_vars_of_config_string(config_file)
+    global_vars = read_vars_of_config_string(config_file, config)
 
-    config['aurora_installation_path'] = global_vars[0][0]
+    config = global_vars[6]
+    
 
     # the info if the given profile is a FIS or CTR profile
     is_fis_or_ctr = is_ctr_or_fis_profile(global_vars[1][0])
@@ -504,16 +511,18 @@ def main():
     icao_of_main_airport = global_vars[1][0][0:4]
 
     # Getting all NAV points
-    path_of_nav_data = read_vars_of_config_string(config_file)[0][0]
+    path_of_nav_data = global_vars[0][0]
+    path_of_nav_data = path_of_nav_data.replace('\\', '/')
     path_of_nav_data = path_of_nav_data + "/SectorFiles/include/DE1/" + global_vars[5][0] + "/NAV/"
+    
     fixes = get_all_nav_points(path_of_nav_data, "FIX")
     ndbs = get_all_nav_points(path_of_nav_data, "NDB")
     vors = get_all_nav_points(path_of_nav_data, "VOR")
 
-    # The profile file as a string
-    profile_string = profile_to_string(read_vars_of_config_string(config_file)[0][0],
-                                       read_vars_of_config_string(config_file)[1][0])
 
+    # The profile file as a string
+    profile_string = profile_to_string(global_vars[0][0], global_vars[1][0])
+    
     # Removing the NAV points which should be displayed on every RWY config
     nav_data_array = remove_nav_points_from_global_vars(global_vars, vors, ndbs, fixes)
     vors = nav_data_array[0]
