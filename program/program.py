@@ -501,8 +501,7 @@ def main():
     is_fis_or_ctr = is_ctr_or_fis_profile(config['profile_name'])
 
     # Saving the vars which should be on a specific RWY config as multidimensional array
-    matrix_of_profiles = get_matrix_of_profiles(get_rwy_config_names(config_file), config_file)
-    config['rwy_configs'] = matrix_of_profiles
+    config['rwy_configs'] = get_matrix_of_profiles(get_rwy_config_names(config_file), config_file)
 
     # The 4 letter ICAO code from the main airport or the FIR. Using the first 4 letters from the profile
     icao_of_main_airport = config['profile_name'][0:4]
@@ -607,7 +606,7 @@ def main():
     rwy_config = main_string
 
     # Removing the NAV points which should be displayed on a specific RWY config
-    nav_data_array = remove_navdata_per_rwyconfig(vors, ndbs, fixes, matrix_of_profiles, rwy_config)
+    nav_data_array = remove_navdata_per_rwyconfig(vors, ndbs, fixes, config['rwy_configs'], rwy_config)
     vors = nav_data_array[0]
     ndbs = nav_data_array[1]
     fixes = nav_data_array[2]
@@ -621,17 +620,17 @@ def main():
     new_profile_string = replace_navaids_in_string(profile_string, fixes, vors, ndbs)
 
     # Getting the remarks for a specific RWY config
-    remarks = get_new_remarks(matrix_of_profiles, rwy_config)
+    remarks = get_new_remarks(config['rwy_configs'], rwy_config)
 
     # Getting the main RWYs for a specific RWY config
-    main_rwys = get_runways_of_main_airport(matrix_of_profiles, icao_of_main_airport, rwy_config, is_fis_or_ctr)
+    main_rwys = get_runways_of_main_airport(config['rwy_configs'], icao_of_main_airport, rwy_config, is_fis_or_ctr)
 
     # Replacing the ATIS remarks and main RWY's from the profile string
     new_profile_string = replace_atis_remarks_dep_arr_in_string(new_profile_string, remarks, main_rwys[0],
                                                                 main_rwys[1], is_fis_or_ctr)
 
     # Replacing the active RWY's displayed in the "AIRPORTS" menu in the profile string
-    new_profile_string = set_manual_rwys(new_profile_string, matrix_of_profiles, rwy_config)
+    new_profile_string = set_manual_rwys(new_profile_string, config['rwy_configs'], rwy_config)
 
     # Taking the new profile string and replacing it with the text which were on the old profile file
     filepath_of_profile = config['aurora_installation_path'] + "/Profiles/" + config['profile_name'] + ".cpr"
