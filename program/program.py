@@ -1,5 +1,15 @@
 import tkinter as tk
 import subprocess
+import json
+import os
+from os.path import join as pjoin
+appdatapath = pjoin(os.getenv('LOCALAPPDATA'), "AuroraProfilePerRWYConfig")
+os.makedirs(appdatapath, exist_ok=True)
+configfilename = pjoin(appdatapath, "config.json")
+
+DEFAULT_CONFIG = {
+    'the_config_file_path': appdatapath + "\\" + "config_eddb.txt"
+}
 
 
 # Read given config file and returns it as a string
@@ -7,6 +17,22 @@ def config_file_as_string(file_path):
     with open(file_path, 'r') as file:
         file_content = file.read()
     return file_content
+
+
+def load_config():
+    config = DEFAULT_CONFIG.copy()
+    try:
+        with open(configfilename, "r") as infile:
+            written_config = json.load(infile)
+        config.update(written_config)
+    except FileNotFoundError:
+        pass
+    return config
+
+
+def store_config(config):
+    with open(configfilename, "w") as outfile:
+        json.dump(config, outfile, indent=4)
 
 
 # Getting the vars of the config which should be on every RWY config in the profile per category
@@ -448,6 +474,10 @@ def modify_string(new_value, root):
 
 
 def main():
+    config = load_config()
+
+    store_config(config)
+
     global main_string
 
     # Create GUI window
@@ -482,7 +512,7 @@ def main():
     rwy_config = main_string
 
     # Loading the wished config file as a string
-    config_file_path = "AFILEPATH"
+    config_file_path = config['the_config_file_path']
     config_file = config_file_as_string(config_file_path)
 
     # Saving the vars which should be on every RWY config as array
