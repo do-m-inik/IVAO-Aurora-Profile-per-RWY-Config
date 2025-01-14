@@ -1,7 +1,6 @@
 import tkinter as tk
 import subprocess
 import json
-import time
 import os
 from os.path import join as pjoin
 appdatapath = pjoin(os.getenv('LOCALAPPDATA'), "AuroraProfilePerRWYConfig")
@@ -16,7 +15,7 @@ DEFAULT_CONFIG = {
     'global_vors': ["HAM"],
     'global_ndbs': ["LYE"],
     'global_fixes': ["AMLUH"],
-    'rwy_configs': [["01", ["EDDH"], ["BKD"], ["WSN"], ["IDEKO"], "EXPECT"]]
+    'rwy_configs': [[["01"], ["EDDH"], ["BKD"], ["WSN"], ["IDEKO"], ["EXPECT"]]]
 }
 
 
@@ -499,13 +498,13 @@ def main():
     global_vars = read_vars_of_config_string(config_file, config)
 
     config = global_vars[6]
-    
 
-    # the info if the given profile is a FIS or CTR profile
+    # The info if the given profile is a FIS or CTR profile
     is_fis_or_ctr = is_ctr_or_fis_profile(global_vars[1][0])
 
     # Saving the vars which should be on a specific RWY config as multidimensional array
     matrix_of_profiles = get_matrix_of_profiles(get_rwy_config_names(config_file), config_file)
+    config['rwy_configs'] = matrix_of_profiles
 
     # The 4 letter ICAO code from the main airport or the FIR. Using the first 4 letters from the profile
     icao_of_main_airport = global_vars[1][0][0:4]
@@ -518,7 +517,6 @@ def main():
     fixes = get_all_nav_points(path_of_nav_data, "FIX")
     ndbs = get_all_nav_points(path_of_nav_data, "NDB")
     vors = get_all_nav_points(path_of_nav_data, "VOR")
-
 
     # The profile file as a string
     profile_string = profile_to_string(global_vars[0][0], global_vars[1][0])
