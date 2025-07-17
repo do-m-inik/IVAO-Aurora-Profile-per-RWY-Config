@@ -535,7 +535,7 @@ def main():
     label.pack(pady=20)
 
     # Buttons for RWY Configs
-    rwy_config_names = [sublist[0] for sublist in matrix_of_profiles]
+    rwy_config_names = [sublist[0] for sublist in config['rwy_configs']]
     button1 = tk.Button(
         root,
         text="   " + rwy_config_names[0] + "   ",
