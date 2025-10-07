@@ -163,11 +163,11 @@ def get_matrix_of_profiles(rwy_configs, global_config):
 # Getting all VOR's, NDB's or FIXES from the sector file
 def get_all_nav_points(file_path, nav_type):
     if nav_type == "FIX":
-        file_path += "DE_FIXES.fix"
+        file_path += "AT_Waypoints.fix"
     elif nav_type == "NDB":
-        file_path += "DE_NDB.ndb"
+        file_path += "AT_NDBs.ndb"
     elif nav_type == "VOR":
-        file_path += "DE_VOR.vor"
+        file_path += "AT_VORs.vor"
 
     values = []
 
@@ -509,7 +509,7 @@ def main():
     # Getting all NAV points
     path_of_nav_data = config['aurora_installation_path']
     path_of_nav_data = path_of_nav_data.replace('\\', '/')
-    path_of_nav_data = path_of_nav_data + "/SectorFiles/include/DE1/" + config['fir'] + "/NAV/"
+    path_of_nav_data = path_of_nav_data + "/SectorFiles/include/" + config['fir'] + "/NAV/"
     
     fixes = get_all_nav_points(path_of_nav_data, "FIX")
     ndbs = get_all_nav_points(path_of_nav_data, "NDB")
