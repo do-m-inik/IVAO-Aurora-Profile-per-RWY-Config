@@ -21,7 +21,7 @@ DEFAULT_CONFIG = {
 
 # Read given config file and returns it as a string
 def config_file_as_string(file_path):
-    with open(file_path, 'r') as file:
+    with open(file_path, 'r', encoding='utf-8') as file:
         file_content = file.read()
     return file_content
 
@@ -29,7 +29,7 @@ def config_file_as_string(file_path):
 def load_config():
     config = DEFAULT_CONFIG.copy()
     try:
-        with open(configfilename, "r") as infile:
+        with open(configfilename, "r", encoding='utf-8') as infile:
             written_config = json.load(infile)
         config.update(written_config)
     except FileNotFoundError:
@@ -38,7 +38,7 @@ def load_config():
 
 
 def store_config(config):
-    with open(configfilename, "w") as outfile:
+    with open(configfilename, "w", encoding='utf-8') as outfile:
         json.dump(config, outfile, indent=4)
 
 
@@ -171,7 +171,7 @@ def get_all_nav_points(file_path, nav_type):
 
     values = []
 
-    with open(file_path, 'r') as file:  # Reading the sector file
+    with open(file_path, 'r', encoding='utf-8') as file:  # Reading the sector file
         for line in file:
             line = line.split('//')[0].strip()
             if line:
@@ -185,7 +185,7 @@ def get_all_nav_points(file_path, nav_type):
 def profile_to_string(installation_path, profile_name):
     profile_file = installation_path + "/Profiles/" + profile_name + ".cpr"
 
-    with open(profile_file, 'r') as file:
+    with open(profile_file, 'r', encoding='utf-8') as file:
         file_content = file.read()
 
     return file_content
@@ -327,7 +327,7 @@ def replace_atis_remarks_dep_arr_in_string(s, remarks, dep, arr, is_fis_or_ctr):
 
 # Takes the new profile string and writes it into the profile file
 def replace_file_content(file_path, new_content):
-    with open(file_path, 'w') as file:
+    with open(file_path, 'w', encoding='utf-8') as file:
         file.write(new_content)
 
 
